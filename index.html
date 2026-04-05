@@ -3,103 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>PKRAAJ HUB | Digital Hub</title>
+    <title>PKRAAJ HUB | Digital Store</title>
     <style>
-        :root { --primary: #2563eb; --dark: #0f172a; --light: #f8fafc; --success: #10b981; --gray: #64748b; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; background: var(--light); color: var(--dark); padding-bottom: 30px; }
+        :root { --primary: #2563eb; --dark: #0f172a; --light: #f8fafc; --success: #10b981; }
+        body { margin: 0; font-family: sans-serif; background: var(--light); padding-bottom: 80px; }
+        header { background: var(--dark); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .admin-toggle { background: var(--primary); border: none; color: white; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
         
-        header { background: var(--dark); color: white; padding: 18px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .logo { font-weight: 900; font-size: 1.6rem; letter-spacing: 1px; }
+        #adminPanel { display: none; background: white; padding: 20px; border-bottom: 3px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; }
+        .publish-btn { width: 100%; background: var(--success); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
-        /* Navigation Folders */
-        .tabs { background: white; display: flex; overflow-x: auto; padding: 12px; gap: 10px; position: sticky; top: 62px; z-index: 999; border-bottom: 1px solid #e2e8f0; scrollbar-width: none; }
-        .tab-btn { padding: 9px 22px; border-radius: 25px; border: 1px solid #cbd5e1; background: #fff; white-space: nowrap; font-size: 13px; font-weight: bold; cursor: pointer; color: var(--gray); transition: 0.3s; }
-        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
+        .tabs { background: white; display: flex; overflow-x: auto; padding: 12px; gap: 10px; border-bottom: 1px solid #ddd; position: sticky; top: 58px; z-index: 999; scrollbar-width: none; }
+        .tab { padding: 8px 20px; border-radius: 20px; border: 1px solid #ccc; white-space: nowrap; font-size: 13px; font-weight: bold; cursor: pointer; color: #64748b; }
+        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        .container { padding: 20px; max-width: 800px; margin: 0 auto; min-height: 60vh; }
-        
-        /* Card Layout */
-        .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid #f1f5f9; display: block; animation: fadeIn 0.5s ease; }
+        .container { padding: 20px; max-width: 800px; margin: 0 auto; }
+        .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid #eee; display: block; animation: fadeIn 0.4s ease; }
         .card-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 55px; color: white; }
         .card-body { padding: 20px; }
-        .card-category { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-        .card-title { font-size: 1.3rem; font-weight: 800; margin: 0 0 10px 0; color: #1e293b; }
-        .card-desc { font-size: 14px; color: var(--gray); line-height: 1.6; margin-bottom: 20px; }
+        .card-title { font-size: 1.3rem; font-weight: 800; margin: 5px 0; color: #1e293b; }
+        .card-desc { font-size: 14px; color: #64748b; line-height: 1.6; }
         
-        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 15px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 15px; margin-top: 15px; }
         .price { font-weight: 900; font-size: 1.5rem; }
-        
-        .btn { text-decoration: none; padding: 12px 28px; border-radius: 12px; font-weight: bold; font-size: 14px; transition: 0.2s; }
-        .btn-pay { background: var(--primary); color: white; }
-        .btn-free { background: var(--success); color: white; }
-
-        footer { background: #fff; padding: 40px 20px; text-align: center; border-top: 1px solid #e2e8f0; margin-top: 50px; }
-        .f-links a { color: var(--gray); text-decoration: none; font-size: 12px; font-weight: 600; margin: 0 10px; }
+        .btn-action { background: var(--primary); color: white; text-decoration: none; padding: 12px 25px; border-radius: 12px; font-weight: bold; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<header><div class="logo">PKRAAJ HUB</div></header>
+<header>
+    <div style="font-weight:900; font-size: 1.3rem;">PKRAAJ HUB</div>
+    <button class="admin-toggle" id="adminBtn">+ ADMIN</button>
+</header>
 
-<div class="tabs">
-    <button class="tab-btn active" onclick="filter('all', this)">All</button>
-    <button class="tab-btn" onclick="filter('themes', this)">Themes</button>
-    <button class="tab-btn" onclick="filter('apps', this)">Apps</button>
-    <button class="tab-btn" onclick="filter('software', this)">Software</button>
-    <button class="tab-btn" onclick="filter('pc', this)">PC</button>
+<div id="adminPanel">
+    <h3 style="margin-top:0;">Add New Post</h3>
+    <input type="text" id="pName" placeholder="Product Name">
+    <input type="text" id="pPrice" placeholder="Price (e.g. ₹299 or FREE)">
+    <input type="text" id="pLink" placeholder="Link (URL)">
+    <textarea id="pDesc" rows="3" placeholder="Description (AdSense के लिए 5-6 लाइन लिखें)"></textarea>
+    <select id="pFolder">
+        <option value="themes">Themes</option>
+        <option value="apps">Apps</option>
+        <option value="software">Software</option>
+        <option value="pc">PC</option>
+    </select>
+    <button class="publish-btn" id="submitBtn">PUBLISH TO STORE</button>
 </div>
 
-<div class="container" id="main-grid">
+<div class="tabs">
+    <div class="tab active" onclick="filter('all', this)">All Items</div>
+    <div class="tab" onclick="filter('themes', this)">Themes</div>
+    <div class="tab" onclick="filter('apps', this)">Apps</div>
+    <div class="tab" onclick="filter('software', this)">Software</div>
+    <div class="tab" onclick="filter('pc', this)">PC</div>
+</div>
 
-    <div class="card themes">
-        <div class="card-img" style="background: linear-gradient(45deg, #2563eb, #3b82f6);">🎨</div>
-        <div class="card-body">
-            <span class="card-category" style="color: #2563eb;">Themes Folder</span>
-            <h3 class="card-title">SEO Master Pro Theme</h3>
-            <p class="card-desc">AdSense ke liye yahan 5 line ka description likhen. Ye premium theme SEO friendly hai.</p>
-            <div class="card-footer">
-                <span class="price">₹299</span>
-                <a href="LINK_HERE" class="btn btn-pay">Buy Now</a>
-            </div>
-        </div>
-    </div>
+<div class="container" id="postWrapper">
+    <p style="text-align:center; color:#94a3b8;">डेटाबेस से जुड़ रहा है...</p>
+</div>
 
-    <div class="card pc">
-        <div class="card-img" style="background: linear-gradient(45deg, #475569, #1e293b);">💻</div>
-        <div class="card-body">
-            <span class="card-category" style="color: #475569;">PC Folder</span>
-            <h3 class="card-title">Windows Optimizer</h3>
-            <p class="card-desc">PC folder ka sample. Download button ke liye 'btn-free' class use karen.</p>
-            <div class="card-footer">
-                <span class="price" style="color:var(--success)">FREE</span>
-                <a href="LINK_HERE" class="btn btn-free">Download</a>
-            </div>
-        </div>
-    </div>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    </div>
+    // आपकी डिटेल्स जो आपने भेजीं
+    const firebaseConfig = {
+        apiKey: "AIzaSyC5FXO_xlO0qXGSnGWE62GYSD9hXwcErjE",
+        authDomain: "mybloglikes-95f54.firebaseapp.com",
+        databaseURL: "https://mybloglikes-95f54-default-rtdb.firebaseio.com",
+        projectId: "mybloglikes-95f54",
+        storageBucket: "mybloglikes-95f54.firebasestorage.app",
+        messagingSenderId: "458642789264",
+        appId: "1:458642789264:web:3d60f9fec2f4b64224d915"
+    };
 
-<footer>
-    <div class="f-links">
-        <a href="#">Privacy Policy</a> | <a href="#">About Us</a> | <a href="#">Contact</a>
-    </div>
-    <p style="font-size: 11px; color: #94a3b8; margin-top: 15px;">© 2026 PKRAAJ HUB. All Rights Reserved.</p>
-</footer>
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // 1. Admin Panel Toggle
+    document.getElementById('adminBtn').onclick = () => {
+        let p = document.getElementById('adminPanel');
+        p.style.display = (p.style.display === 'block') ? 'none' : 'block';
+    };
+
+    // 2. Post Upload
+    document.getElementById('submitBtn').onclick = () => {
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        const link = document.getElementById('pLink').value;
+        const desc = document.getElementById('pDesc').value;
+        const folder = document.getElementById('pFolder').value;
+
+        if(!name || !link || !desc) return alert("सारी जानकारी भरें!");
+
+        push(ref(db, 'posts'), { name, price, link, desc, folder, date: Date.now() });
+        alert("Success! पोस्ट लाइव हो गई।");
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('pName').value = '';
+        document.getElementById('pDesc').value = '';
+    };
+
+    // 3. Real-time Display
+    onValue(ref(db, 'posts'), (snapshot) => {
+        const wrapper = document.getElementById('postWrapper');
+        wrapper.innerHTML = '';
+        snapshot.forEach((child) => {
+            const p = child.val();
+            let color = p.folder === 'themes' ? '#2563eb' : p.folder === 'apps' ? '#f59e0b' : p.folder === 'pc' ? '#475569' : '#764abc';
+            let icon = p.folder === 'themes' ? '🎨' : p.folder === 'apps' ? '📱' : p.folder === 'pc' ? '💻' : '🌐';
+
+            wrapper.innerHTML += `
+                <div class="card ${p.folder}">
+                    <div class="card-img" style="background:${color}">${icon}</div>
+                    <div class="card-body">
+                        <span style="font-size:10px; font-weight:bold; color:${color}; text-transform:uppercase;">${p.folder}</span>
+                        <h2 class="card-title">${p.name}</h2>
+                        <p class="card-desc">${p.desc}</p>
+                        <div class="card-footer">
+                            <span class="price">${p.price}</span>
+                            <a href="${p.link}" target="_blank" class="btn-action">${p.price === 'FREE' ? 'Download' : 'Buy Now'}</a>
+                        </div>
+                    </div>
+                </div>`;
+        });
+    });
+</script>
 
 <script>
+    // Filtering Logic
     function filter(cat, btn) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
-        let cards = document.querySelectorAll('.card');
-        cards.forEach(card => {
-            if (cat === 'all') card.style.display = 'block';
-            else card.classList.contains(cat) ? card.style.display = 'block' : card.style.display = 'none';
+        document.querySelectorAll('.card').forEach(c => {
+            if(cat === 'all') c.style.display = 'block';
+            else c.classList.contains(cat) ? c.style.display = 'block' : c.style.display = 'none';
         });
     }
 </script>
-
 </body>
 </html>
