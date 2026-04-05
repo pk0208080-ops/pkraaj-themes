@@ -3,175 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>PKRAAJ DIGITAL HUB | Premium Themes & Apps</title>
-
-    <meta name="description" content="PKRAAJ DIGITAL HUB - Download premium Blogger themes, SEO optimized and Adsense ready designs.">
-    <meta name="keywords" content="PKRAAJ, Blogger Themes, Premium Templates, Free Download">
-    <meta name="author" content="PKRAAJ">
-
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>PKRAAJ DIGITAL HUB | Themes, Apps & Softwares</title>
 
     <style>
-        /* --- 1. CSS VARIABLES & RESET --- */
         :root { 
-            --primary: #2563eb; 
-            --dark: #0f172a; 
-            --light: #f1f5f9; 
-            --text: #334155;
-            --success: #10b981;
-            --white: #ffffff;
+            --primary: #2563eb; --dark: #0f172a; --light: #f1f5f9; 
+            --text: #334155; --success: #10b981; --white: #ffffff;
+            --orange: #f59e0b; --purple: #8b5cf6;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            margin: 0; font-family: 'Segoe UI', Roboto, sans-serif; 
-            background: var(--light); color: var(--text); 
-            padding-bottom: 80px; overflow-x: hidden; 
-        }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--light); color: var(--text); padding-bottom: 80px; }
 
-        /* --- 2. SPLASH SCREEN (WELCOME ANIMATION) --- */
+        /* Splash Screen */
         #splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: var(--dark); color: white; display: flex;
-            flex-direction: column; justify-content: center; align-items: center; 
-            z-index: 9999; transition: 0.8s ease-out;
+            justify-content: center; align-items: center; z-index: 9999; transition: 0.8s;
         }
-        .splash-logo { font-size: 3rem; font-weight: 900; letter-spacing: 10px; animation: pulse 1.5s infinite; }
+        .splash-logo { font-size: 3rem; font-weight: 900; letter-spacing: 5px; }
         .splash-logo span { color: var(--primary); }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        /* --- 3. HEADER & HERO --- */
-        header { 
-            background: var(--dark); color: white; padding: 15px 5%; 
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
+        /* Header */
+        header { background: var(--dark); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
         .logo { font-size: 1.5rem; font-weight: 800; text-decoration: none; color: white; }
         .logo span { color: var(--primary); }
 
-        .hero { 
-            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); 
-            color: white; padding: 50px 20px; text-align: center; 
-        }
-        .hero h1 { margin: 0; font-size: 2rem; letter-spacing: 1px; }
-        .hero p { opacity: 0.9; font-size: 1rem; margin-top: 10px; }
+        /* Hero */
+        .hero { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: white; padding: 60px 20px; text-align: center; }
 
-        /* --- 4. GRID & PREMIUM CARDS --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 30px 15px; }
+        /* Sections */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
+        .sec-title { border-left: 5px solid var(--primary); padding-left: 15px; margin: 40px 0 20px; font-size: 1.5rem; text-transform: uppercase; font-weight: 900; }
+        
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         
-        .card { 
-            background: white; border-radius: 15px; overflow: hidden; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee;
-            transition: 0.3s; position: relative;
-        }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .card-img { width: 100%; height: 180px; background: #ddd; object-fit: cover; }
-        .card-content { padding: 20px; }
-        .tag { font-size: 10px; font-weight: bold; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
-        .tag-premium { background: #fee2e2; color: #ef4444; }
-        .tag-free { background: #dcfce7; color: #16a34a; }
+        /* Card Style */
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .card-img { width: 100%; height: 160px; object-fit: cover; background: #ddd; }
+        .card-content { padding: 15px; }
+        
+        .tag { font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; text-transform: uppercase; color: white; }
+        
+        .price { font-size: 1.3rem; font-weight: 800; margin: 10px 0; }
+        .btn-buy { display: block; text-align: center; background: var(--primary); color: white; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; }
 
-        .price { font-size: 1.5rem; font-weight: 800; color: var(--dark); margin: 15px 0; }
-        .btn-buy { 
-            display: block; text-align: center; background: var(--primary); 
-            color: white; text-decoration: none; padding: 12px; 
-            border-radius: 10px; font-weight: bold; transition: 0.2s;
-        }
-        .btn-buy:active { transform: scale(0.95); }
-
-        /* --- 5. BOTTOM MOBILE NAV --- */
-        .mobile-nav { 
-            position: fixed; bottom: 0; left: 0; width: 100%; background: white; 
-            display: flex; justify-content: space-around; padding: 10px 0; 
-            border-top: 1px solid #eee; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000; 
-        }
-        .nav-item { text-decoration: none; color: #94a3b8; font-size: 10px; text-align: center; }
+        /* Bottom Nav */
+        .mobile-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
+        .nav-item { text-decoration: none; color: #94a3b8; font-size: 11px; text-align: center; }
         .nav-item.active { color: var(--primary); font-weight: bold; }
-        .nav-icon { font-size: 20px; margin-bottom: 2px; }
 
-        /* --- 6. FLOATING WHATSAPP --- */
-        .whatsapp-float {
-            position: fixed; bottom: 80px; right: 20px; background: #25d366; 
-            width: 60px; height: 60px; border-radius: 50%; display: flex; 
-            justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
-            z-index: 999; transition: 0.3s;
-        }
+        .whatsapp-float { position: fixed; bottom: 85px; right: 20px; background: #25d366; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 999; }
     </style>
 </head>
 <body>
 
-    <div id="splash">
-        <div class="splash-logo"><span>P</span>KRAAJ</div>
-        <p style="margin-top:20px; font-size:12px; letter-spacing:2px;">LOADING HUB...</p>
-    </div>
+    <div id="splash"><div class="splash-logo"><span>P</span>KRAAJ</div></div>
 
     <header>
         <a href="#" class="logo"><span>P</span>KRAAJ HUB</a>
-        <a href="https://wa.me/919306930312" style="color:var(--primary); text-decoration:none; font-weight:bold; font-size:13px;">SUPPORT</a>
+        <a href="https://wa.me/919306930312" style="color:var(--primary); text-decoration:none; font-weight:bold; font-size:13px;">ADMIN</a>
     </header>
 
     <section class="hero">
-        <h1>PKRAAJ DIGITAL HUB</h1>
-        <p>Your Premium Destination for Themes & Scripts</p>
+        <h1>ALL-IN-ONE DIGITAL STORE</h1>
+        <p>Themes, Apps & PC Softwares</p>
     </section>
 
     <div class="container">
+        
+        <div class="sec-title">Blogger Themes</div>
         <div class="grid">
-            
             <div class="card">
-                <img src="https://via.placeholder.com/400x250/2563eb/ffffff?text=Premium+SEO+Theme" alt="Premium Theme" class="card-img">
+                <img src="https://via.placeholder.com/400x200/2563eb/fff?text=SEO+Master" class="card-img">
                 <div class="card-content">
-                    <span class="tag tag-premium">Premium</span>
-                    <h3 style="margin:10px 0;">SEO Master Pro v2.0</h3>
-                    <p style="font-size:13px; color:#64748b;">Ultra Fast, AdSense Ready & fully Responsive theme.</p>
+                    <span class="tag" style="background:var(--primary)">Premium</span>
+                    <h3 style="margin:5px 0;">SEO Master Pro</h3>
                     <div class="price">₹299</div>
-                    <a href="https://wa.me/919306930312?text=I%20want%20to%20buy%20SEO%20Master%20Pro" class="btn-buy">Buy Now</a>
+                    <a href="https://wa.me/919306930312?text=Blogger%20Theme" class="btn-buy">Buy Now</a>
                 </div>
             </div>
-
             <div class="card">
-                <img src="https://via.placeholder.com/400x250/0f172a/ffffff?text=Free+Starter+Theme" alt="Free Theme" class="card-img">
+                <img src="https://via.placeholder.com/400x200/10b981/fff?text=Free+Theme" class="card-img">
                 <div class="card-content">
-                    <span class="tag tag-free">Free</span>
-                    <h3 style="margin:10px 0;">Starter Lite (Free)</h3>
-                    <p style="font-size:13px; color:#64748b;">Best for new bloggers. Simple and clean design.</p>
-                    <div class="price" style="color:var(--success);">FREE</div>
-                    <a href="https://wa.me/919306930312?text=Sir%20Free%20Theme%20Chahiye" class="btn-buy" style="background:var(--success);">Download</a>
+                    <span class="tag" style="background:var(--success)">Free</span>
+                    <h3 style="margin:5px 0;">Starter Lite</h3>
+                    <div class="price">FREE</div>
+                    <a href="https://wa.me/919306930312?text=Free%20Theme" class="btn-buy" style="background:var(--success)">Download</a>
                 </div>
             </div>
-
         </div>
+
+        <div class="sec-title">PC Softwares (.exe)</div>
+        <div class="grid">
+            <div class="card">
+                <img src="https://via.placeholder.com/400x200/0f172a/fff?text=Windows+App" class="card-img">
+                <div class="card-content">
+                    <span class="tag" style="background:var(--dark)">Software</span>
+                    <h3 style="margin:5px 0;">PKRAAJ PC Tool</h3>
+                    <div class="price">₹499</div>
+                    <a href="https://wa.me/919306930312?text=PC%20Software" class="btn-buy" style="background:var(--dark)">Get Now</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="sec-title">Android Apps (.apk)</div>
+        <div class="grid">
+            <div class="card">
+                <img src="https://via.placeholder.com/400x200/f59e0b/fff?text=Android+App" class="card-img">
+                <div class="card-content">
+                    <span class="tag" style="background:var(--orange)">APK</span>
+                    <h3 style="margin:5px 0;">Store Official App</h3>
+                    <div class="price">FREE</div>
+                    <a href="https://wa.me/919306930312?text=Android%20App" class="btn-buy" style="background:var(--orange)">Download APK</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="mobile-nav">
-        <a href="#" class="nav-item active">
-            <div class="nav-icon">🏠</div>Home
-        </a>
-        <a href="https://wa.me/919306930312" class="nav-item">
-            <div class="nav-icon">🎨</div>Themes
-        </a>
-        <a href="https://wa.me/919306930312" class="nav-item">
-            <div class="nav-icon">💻</div>Softwares
-        </a>
-        <a href="https://wa.me/919306930312" class="nav-item">
-            <div class="nav-icon">💬</div>Chat
-        </a>
+        <a href="#" class="nav-item active"><div>🏠</div>Home</a>
+        <a href="https://wa.me/919306930312" class="nav-item"><div>💻</div>PC Soft</a>
+        <a href="https://wa.me/919306930312" class="nav-item"><div>📱</div>Apps</a>
+        <a href="https://wa.me/919306930312" class="nav-item"><div>💬</div>Chat</a>
     </div>
 
     <a href="https://wa.me/919306930312" class="whatsapp-float">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="35" alt="WA">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30" alt="WA">
     </a>
 
     <script>
-        // Splash Screen Removal Logic
         window.addEventListener('load', function() {
             setTimeout(function() {
                 const splash = document.getElementById('splash');
                 splash.style.opacity = '0';
-                setTimeout(() => { splash.style.display = 'none'; }, 800);
-            }, 1500); // 1.5 seconds wait
+                setTimeout(() => { splash.style.display = 'none'; }, 600);
+            }, 1000);
         });
     </script>
 
