@@ -3,185 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>PKRAAJ DIGITAL HUB | Premium Store</title>
+    <title>PKRAAJ DIGITAL HUB</title>
     <style>
-        :root { 
-            --primary: #2563eb; --dark: #0f172a; --light: #f1f5f9; 
-            --text: #334155; --success: #10b981; --white: #ffffff;
-        }
-
+        :root { --primary: #2563eb; --dark: #0f172a; --light: #f1f5f9; --text: #334155; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--light); padding-bottom: 90px; }
+        body { margin: 0; font-family: sans-serif; background: var(--light); padding-bottom: 80px; }
         
-        /* Header */
-        header { background: var(--dark); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 1.4rem; font-weight: 900; color: white; text-decoration: none; }
-        .logo span { color: var(--primary); }
-
-        /* FOLDER TABS (Category Switcher) */
-        .tabs-container { 
-            background: white; padding: 10px 5%; position: sticky; top: 55px; 
-            z-index: 90; display: flex; gap: 10px; overflow-x: auto; 
-            white-space: nowrap; border-bottom: 1px solid #eee;
-            scrollbar-width: none; /* Hide scrollbar for Firefox */
-        }
-        .tabs-container::-webkit-scrollbar { display: none; /* Hide scrollbar for Chrome */ }
-
-        .tab-btn { 
-            padding: 8px 18px; border-radius: 20px; border: 1px solid #ddd;
-            background: #f8fafc; font-size: 13px; font-weight: 600; 
-            cursor: pointer; transition: 0.3s; color: var(--text);
-        }
+        header { background: var(--dark); color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; font-weight: 900; font-size: 1.2rem; }
+        
+        /* Folder Navigation */
+        .folder-tabs { background: white; display: flex; overflow-x: auto; padding: 10px; gap: 10px; border-bottom: 1px solid #ddd; position: sticky; top: 50px; z-index: 99; }
+        .tab-btn { padding: 8px 15px; border-radius: 20px; border: 1px solid #ccc; background: #eee; white-space: nowrap; font-size: 13px; font-weight: bold; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Post Grid */
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
-        .post-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        
-        /* Folders Content Control */
-        .folder-content { display: none; animation: fadeIn 0.4s ease; }
-        .folder-content.active { display: block; }
+        .container { padding: 15px; max-width: 1200px; margin: 0 auto; }
+        .folder-section { display: none; }
+        .folder-section.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Product Cards */
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid #eee; }
+        .card-img { height: 150px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: white; }
+        .card-body { padding: 15px; }
+        .card-title { font-size: 1.1rem; font-weight: bold; margin: 0; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        .price { font-weight: 900; font-size: 1.2rem; }
+        .btn { background: var(--primary); color: white; text-decoration: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 13px; }
 
-        /* Card Style */
-        .post-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee; margin-bottom: 20px; }
-        .post-thumb { width: 100%; height: 150px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: white; }
-        .post-info { padding: 15px; }
-        .post-title { font-size: 1.1rem; font-weight: 700; margin: 0; color: var(--dark); }
-        .post-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .price { font-weight: 800; font-size: 1.2rem; }
-        .btn-get { background: var(--primary); color: white; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: bold; }
-
-        /* Bottom Nav */
-        .mobile-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
-        .nav-item { text-decoration: none; color: #94a3b8; font-size: 10px; text-align: center; }
-        .nav-item.active { color: var(--primary); font-weight: bold; }
-
-        .whatsapp-float { position: fixed; bottom: 85px; right: 20px; background: #25d366; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 999; }
+        .whatsapp { position: fixed; bottom: 70px; right: 15px; background: #25d366; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="#" class="logo"><span>P</span>KRAAJ HUB</a>
-        <a href="https://wa.me/919306930312" style="color:var(--primary); text-decoration:none; font-weight:bold; font-size:12px;">ADMIN</a>
-    </header>
+<header>PKRAAJ DIGITAL HUB</header>
 
-    <div class="tabs-container">
-        <button class="tab-btn active" onclick="openFolder(event, 'all')">All Products</button>
-        <button class="tab-btn" onclick="openFolder(event, 'blogger')">Blogger</button>
-        <button class="tab-btn" onclick="openFolder(event, 'wordpress')">WordPress</button>
-        <button class="tab-btn" onclick="openFolder(event, 'apps')">Apps</button>
-        <button class="tab-btn" onclick="openFolder(event, 'software')">Software</button>
+<div class="folder-tabs">
+    <button class="tab-btn active" onclick="showFolder('all', this)">All</button>
+    <button class="tab-btn" onclick="showFolder('blogger', this)">Blogger</button>
+    <button class="tab-btn" onclick="showFolder('wordpress', this)">WordPress</button>
+    <button class="tab-btn" onclick="showFolder('apps', this)">Apps</button>
+    <button class="tab-btn" onclick="showFolder('software', this)">Software</button>
+</div>
+
+<div class="container">
+
+    <div id="blogger" class="folder-section active">
+        <div class="card">
+            <div class="card-img" style="background: #2563eb;">🎨</div>
+            <div class="card-body">
+                <p style="color:blue; font-weight:bold; margin:0; font-size:12px;">BLOGGER</p>
+                <h3 class="card-title">Premium SEO Theme</h3>
+                <div class="card-footer"><span class="price">₹299</span><a href="https://wa.me/919306930312" class="btn">Buy Now</a></div>
+            </div>
+        </div>
     </div>
 
-    <div class="container">
+    <div id="wordpress" class="folder-section active">
+        <div class="card">
+            <div class="card-img" style="background: #764abc;">🌐</div>
+            <div class="card-body">
+                <p style="color:purple; font-weight:bold; margin:0; font-size:12px;">WORDPRESS</p>
+                <h3 class="card-title">Elementor Pro Kit</h3>
+                <div class="card-footer"><span class="price">₹499</span><a href="https://wa.me/919306930312" class="btn">Get Now</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="apps" class="folder-section active">
+        <div class="card">
+            <div class="card-img" style="background: #f59e0b;">📱</div>
+            <div class="card-body">
+                <p style="color:orange; font-weight:bold; margin:0; font-size:12px;">ANDROID</p>
+                <h3 class="card-title">PKRAAJ Official App</h3>
+                <div class="card-footer"><span class="price" style="color:green;">FREE</span><a href="https://wa.me/919306930312" class="btn" style="background:green;">Download</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="software" class="folder-section active">
+        <div class="card">
+            <div class="card-img" style="background: #0f172a;">💻</div>
+            <div class="card-body">
+                <p style="color:gray; font-weight:bold; margin:0; font-size:12px;">SOFTWARE</p>
+                <h3 class="card-title">PC Fast Tool (.exe)</h3>
+                <div class="card-footer"><span class="price">₹599</span><a href="https://wa.me/919306930312" class="btn" style="background:black;">Get Now</a></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<a href="https://wa.me/919306930312" class="whatsapp"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30"></a>
+
+<script>
+    function showFolder(id, btn) {
+        let sections = document.querySelectorAll('.folder-section');
+        let buttons = document.querySelectorAll('.tab-btn');
         
-        <div id="blogger" class="folder-content active">
-            <div class="post-grid">
-                <div class="post-card">
-                    <div class="post-thumb" style="background: var(--primary);">🎨</div>
-                    <div class="post-info">
-                        <h3 class="post-title">SEO Master Pro v2</h3>
-                        <p style="font-size:12px; color:#64748b;">Premium Blogger Theme</p>
-                        <div class="post-footer">
-                            <div class="price">₹299</div>
-                            <a href="https://wa.me/919306930312" class="btn-get">Buy Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-        <div id="wordpress" class="folder-content">
-            <div class="post-grid">
-                <div class="post-card">
-                    <div class="post-thumb" style="background: #764abc;">🌐</div>
-                    <div class="post-info">
-                        <h3 class="post-title">NewsMag WP Theme</h3>
-                        <p style="font-size:12px; color:#64748b;">Original GPL Theme</p>
-                        <div class="post-footer">
-                            <div class="price">₹499</div>
-                            <a href="https://wa.me/919306930312" class="btn-get">Buy Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="apps" class="folder-content">
-            <div class="post-grid">
-                <div class="post-card">
-                    <div class="post-thumb" style="background: var(--orange);">📱</div>
-                    <div class="post-info">
-                        <h3 class="post-title">PKRAAJ Store App</h3>
-                        <p style="font-size:12px; color:#64748b;">Official Android APK</p>
-                        <div class="post-footer">
-                            <div class="price" style="color:var(--success);">FREE</div>
-                            <a href="https://wa.me/919306930312" class="btn-get" style="background:var(--success);">Download</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="software" class="folder-content">
-            <div class="post-grid">
-                <div class="post-card">
-                    <div class="post-thumb" style="background: var(--dark);">💻</div>
-                    <div class="post-info">
-                        <h3 class="post-title">PC Booster Pro</h3>
-                        <p style="font-size:12px; color:#64748b;">Windows Software .exe</p>
-                        <div class="post-footer">
-                            <div class="price">₹599</div>
-                            <a href="https://wa.me/919306930312" class="btn-get" style="background:var(--dark);">Get Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="mobile-nav">
-        <a href="#" class="nav-item active"><div>🏠</div>Home</a>
-        <a href="https://wa.me/919306930312" class="nav-item"><div>📂</div>Files</a>
-        <a href="https://wa.me/919306930312" class="nav-item"><div>💬</div>Help</a>
-    </div>
-
-    <a href="https://wa.me/919306930312" class="whatsapp-float">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30" alt="WA">
-    </a>
-
-    <script>
-        function openFolder(evt, folderName) {
-            var i, content, tabs;
-            
-            // सब कंटेंट छुपाओ
-            content = document.getElementsByClassName("folder-content");
-            for (i = 0; i < content.length; i++) {
-                content[i].style.display = "none";
-            }
-
-            // सब बटन से active क्लास हटाओ
-            tabs = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tabs.length; i++) {
-                tabs[i].className = tabs[i].className.replace(" active", "");
-            }
-
-            // अगर 'All' चुना है तो सब दिखाओ, वरना सिर्फ चुना हुआ फोल्डर
-            if(folderName === 'all') {
-                for (i = 0; i < content.length; i++) {
-                    content[i].style.display = "block";
-                }
+        sections.forEach(s => {
+            if (id === 'all') {
+                s.style.display = 'block';
             } else {
-                document.getElementById(folderName).style.display = "block";
+                s.id === id ? s.style.display = 'block' : s.style.display = 'none';
             }
-            
-            evt.currentTarget.className += " active";
-        }
-    </script>
+        });
+    }
+</script>
 
 </body>
 </html>
