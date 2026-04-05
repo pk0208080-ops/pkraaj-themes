@@ -3,146 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>PKRAAJ HUB | Admin Panel</title>
+    <title>PKRAAJ HUB | Professional Store</title>
     <style>
-        :root { --primary: #2563eb; --dark: #0f172a; --light: #f1f5f9; --success: #10b981; }
+        :root { --primary: #2563eb; --dark: #0f172a; --light: #f1f5f9; --success: #10b981; --warning: #f59e0b; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; font-family: sans-serif; background: var(--light); padding-bottom: 80px; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--light); padding-bottom: 80px; }
         
-        header { background: var(--dark); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .admin-btn { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        /* Header */
+        header { background: var(--dark); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .logo { font-weight: 900; font-size: 1.3rem; letter-spacing: 1px; }
+        .admin-btn { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; }
 
-        /* Admin Form */
-        #postForm { display: none; background: white; padding: 20px; border-radius: 15px; margin: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 2px solid var(--primary); }
-        #postForm input, #postForm select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
-        .submit-btn { width: 100%; background: var(--success); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; margin-top: 10px; }
+        /* Admin Form (Hidden by Default) */
+        #postForm { display: none; background: white; padding: 20px; border-radius: 0 0 20px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-bottom: 4px solid var(--primary); position: relative; z-index: 101; }
+        #postForm input, #postForm select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
+        .submit-btn { width: 100%; background: var(--success); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
 
-        /* Tabs */
-        .tabs { background: white; display: flex; overflow-x: auto; padding: 12px; gap: 10px; border-bottom: 1px solid #ddd; position: sticky; top: 55px; z-index: 99; scrollbar-width: none; }
-        .tab { padding: 8px 20px; border-radius: 25px; border: 1px solid #ccc; background: #fff; font-size: 13px; font-weight: bold; cursor: pointer; white-space: nowrap; }
-        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        /* Navigation Folders */
+        .folder-tabs { background: white; display: flex; overflow-x: auto; padding: 12px; gap: 10px; border-bottom: 1px solid #ddd; position: sticky; top: 55px; z-index: 99; scrollbar-width: none; }
+        .tab-btn { padding: 8px 22px; border-radius: 25px; border: 1px solid #ddd; background: #fff; white-space: nowrap; font-size: 13px; font-weight: 700; cursor: pointer; color: #64748b; }
+        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3); }
 
-        /* Cards */
-        .container { padding: 15px; }
-        .folder-section { display: none; }
-        .folder-section.active { display: block; }
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #eee; }
-        .card-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 50px; color: white; }
-        .card-body { padding: 15px; }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .price-tag { font-weight: 900; font-size: 1.3rem; color: var(--dark); }
-        .btn-action { text-decoration: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 14px; color: white; }
+        /* Container & Cards */
+        .container { padding: 15px; max-width: 1200px; margin: 0 auto; }
+        .folder-section { display: none; transition: 0.3s; }
+        .folder-section.active { display: block; animation: fadeIn 0.4s ease; }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        #postForm.open { display: block; animation: slideIn 0.3s ease; }
+        .card { background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #eee; position: relative; }
+        .card-img { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 55px; color: white; transition: 0.3s; }
+        .card-body { padding: 18px; }
+        .cat-tag { font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 5px; text-transform: uppercase; margin-bottom: 8px; display: inline-block; }
+        .card-title { font-size: 1.25rem; font-weight: 800; margin: 5px 0; color: var(--dark); }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; border-top: 1px solid #f1f5f9; padding-top: 15px; }
+        .price { font-weight: 900; font-size: 1.4rem; }
+        .btn-link { text-decoration: none; padding: 12px 22px; border-radius: 12px; font-weight: bold; font-size: 14px; color: white; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #eee; z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .nav-item { text-decoration: none; color: #94a3b8; font-size: 11px; text-align: center; font-weight: 600; }
+        .nav-item.active { color: var(--primary); }
+
+        .whatsapp-float { position: fixed; bottom: 85px; right: 20px; background: #25d366; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 99; transition: 0.3s; }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight:900; font-size: 1.3rem;">PKRAAJ HUB</div>
+    <div class="logo">PKRAAJ HUB</div>
     <button class="admin-btn" onclick="toggleForm()">+ NEW POST</button>
 </header>
 
 <div id="postForm">
-    <h3 style="margin:0 0 15px 0; color:var(--dark);">Add New Product</h3>
-    <input type="text" id="pName" placeholder="Product Name (जैसे: SEO Master Pro)">
-    
-    <select id="pType" onchange="checkPrice()">
-        <option value="paid">Paid (पैसे वाला)</option>
+    <h3 style="margin:0 0 10px 0;">Add New Product</h3>
+    <input type="text" id="pName" placeholder="Product Name (e.g. SEO Master Pro)">
+    <select id="pType" onchange="togglePriceInput()">
+        <option value="paid">PAID (पैसे वाला)</option>
         <option value="free">FREE (मुफ्त)</option>
     </select>
-    
-    <input type="text" id="pPrice" placeholder="Price (जैसे: ₹299)">
-    
+    <input type="text" id="pPrice" placeholder="Price (e.g. ₹299)">
     <select id="pFolder">
         <option value="blogger">Blogger</option>
         <option value="wordpress">WordPress</option>
         <option value="apps">Apps</option>
         <option value="software">Software</option>
     </select>
-    
-    <button class="submit-btn" onclick="addPost()">UPLOAD POST</button>
-    <button onclick="toggleForm()" style="width:100%; background:none; border:none; color:red; margin-top:15px; font-weight:bold;">Cancel</button>
+    <button class="submit-btn" onclick="createNewPost()">UPLOAD NOW</button>
+    <button onclick="toggleForm()" style="width:100%; background:none; border:none; color:red; margin-top:10px; font-weight:bold;">Cancel</button>
 </div>
 
-<div class="tabs">
-    <button class="tab active" onclick="filter('all', this)">All Products</button>
-    <button class="tab" onclick="filter('blogger', this)">Blogger</button>
-    <button class="tab" onclick="filter('wordpress', this)">WordPress</button>
-    <button class="tab" onclick="filter('apps', this)">Apps</button>
-    <button class="tab" onclick="filter('software', this)">Software</button>
+<div class="folder-tabs">
+    <button class="tab-btn active" onclick="filterFolder('all', this)">All Products</button>
+    <button class="tab-btn" onclick="filterFolder('blogger', this)">Blogger</button>
+    <button class="tab-btn" onclick="filterFolder('wordpress', this)">WordPress</button>
+    <button class="tab-btn" onclick="filterFolder('apps', this)">Apps</button>
+    <button class="tab-btn" onclick="filterFolder('software', this)">Software</button>
 </div>
 
-<div class="container" id="mainContainer">
+<div class="container" id="contentArea">
     <div id="blogger" class="folder-section active"></div>
     <div id="wordpress" class="folder-section active"></div>
     <div id="apps" class="folder-section active"></div>
     <div id="software" class="folder-section active"></div>
 </div>
 
+<div class="bottom-nav">
+    <a href="#" class="nav-item active"><div>🏠</div>Home</a>
+    <a href="https://wa.me/919306930312" class="nav-item"><div>📂</div>Files</a>
+    <a href="https://wa.me/919306930312" class="nav-item"><div>💬</div>Chat</a>
+</div>
+
+<a href="https://wa.me/919306930312" class="whatsapp-float"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30"></a>
+
 <script>
     function toggleForm() {
-        document.getElementById('postForm').classList.toggle('open');
+        let f = document.getElementById('postForm');
+        f.style.display = (f.style.display === 'block') ? 'none' : 'block';
     }
 
-    function checkPrice() {
+    function togglePriceInput() {
         let type = document.getElementById('pType').value;
-        let priceInput = document.getElementById('pPrice');
-        if(type === "free") {
-            priceInput.value = "FREE";
-            priceInput.disabled = true;
-        } else {
-            priceInput.value = "";
-            priceInput.disabled = false;
-        }
+        let pInput = document.getElementById('pPrice');
+        if(type === 'free') { pInput.value = "FREE"; pInput.disabled = true; }
+        else { pInput.value = ""; pInput.disabled = false; }
     }
 
-    function addPost() {
+    function createNewPost() {
         let name = document.getElementById('pName').value;
         let price = document.getElementById('pPrice').value;
         let type = document.getElementById('pType').value;
         let folder = document.getElementById('pFolder').value;
-        
-        if(!name || !price) { alert("Details भरिये!"); return; }
+        let whatsapp = "919306930312";
 
-        let icon = "📦", color = "#2563eb", btnLabel = "Buy Now", btnColor = "#2563eb";
-        
-        if(folder === "wordpress") { icon = "🌐"; color = "#764abc"; }
-        if(folder === "apps") { icon = "📱"; color = "#f59e0b"; }
-        if(folder === "software") { icon = "💻"; color = "#0f172a"; }
+        if(!name || !price) { alert("Please enter details!"); return; }
 
-        if(type === "free") {
-            btnLabel = "Download";
-            btnColor = "#10b981"; // Green for Free
-        }
+        let icon = "📦", color = "#2563eb", btnText = "Buy Now", btnColor = "#2563eb";
+        if(folder === 'wordpress') { icon = "🌐"; color = "#764abc"; }
+        if(folder === 'apps') { icon = "📱"; color = "#f59e0b"; }
+        if(folder === 'software') { icon = "💻"; color = "#0f172a"; }
 
-        let newCard = `
+        if(type === 'free') { btnText = "Download Free"; btnColor = "#10b981"; price = "FREE"; }
+
+        let cardHTML = `
             <div class="card">
-                <div class="card-img" style="background: ${color};">${icon}</div>
+                <div class="card-img" style="background:${color}">${icon}</div>
                 <div class="card-body">
-                    <p style="font-size:10px; font-weight:900; color:${color}; margin:0; text-transform:uppercase;">${folder}</p>
+                    <span class="cat-tag" style="background:${color}20; color:${color}">${folder}</span>
                     <h3 class="card-title">${name}</h3>
                     <div class="card-footer">
-                        <span class="price-tag" style="color: ${type === 'free' ? '#10b981' : '#0f172a'}">${price}</span>
-                        <a href="https://wa.me/919306930312" class="btn-action" style="background:${btnColor};">${btnLabel}</a>
+                        <span class="price" style="color:${type === 'free' ? '#10b981' : '#0f172a'}">${price}</span>
+                        <a href="https://wa.me/${whatsapp}?text=I+want+to+get+${name.replace(/ /g,'+')}" class="btn-link" style="background:${btnColor}">${btnText}</a>
                     </div>
                 </div>
             </div>`;
-        
-        document.getElementById(folder).innerHTML = newCard + document.getElementById(folder).innerHTML;
+
+        document.getElementById(folder).insertAdjacentHTML('afterbegin', cardHTML);
         toggleForm();
-        alert("Post Successfully Added!");
+        alert("Success! Your post is added.");
     }
 
-    function filter(id, btn) {
+    function filterFolder(id, btn) {
         let sections = document.querySelectorAll('.folder-section');
-        let buttons = document.querySelectorAll('.tab');
-        buttons.forEach(b => b.classList.remove('active'));
+        let btns = document.querySelectorAll('.tab-btn');
+        btns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        
         sections.forEach(s => {
-            if (id === 'all') { s.style.display = 'block'; } 
-            else { s.id === id ? s.style.display = 'block' : s.style.display = 'none'; }
+            if(id === 'all') s.style.display = 'block';
+            else s.id === id ? s.style.display = 'block' : s.style.display = 'none';
         });
     }
 </script>
