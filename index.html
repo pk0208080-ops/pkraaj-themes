@@ -3,114 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PKRAAJ HUB ADMIN</title>
+<title>PKRAAJ HUB PRO</title>
 
 <style>
-:root {
+:root{
   --primary:#2563eb;
+  --dark:#0f172a;
+  --light:#f1f5f9;
   --danger:#ef4444;
   --edit:#f59e0b;
 }
 
-body {
-  font-family:sans-serif;
+body{
   margin:0;
-  background:#f1f5f9;
+  font-family:sans-serif;
+  background:var(--light);
 }
 
-header {
-  background:#0f172a;
+header{
+  background:var(--dark);
   color:#fff;
   padding:15px;
   text-align:center;
+  font-size:18px;
   font-weight:bold;
 }
 
-.container {
-  max-width:800px;
+.container{
+  max-width:900px;
   margin:auto;
   padding:15px;
 }
 
-input, textarea {
+.form{
+  background:#fff;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+  margin-bottom:20px;
+}
+
+input,textarea{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin:6px 0;
-  border-radius:8px;
+  border-radius:10px;
   border:1px solid #ccc;
 }
 
-button {
-  padding:10px;
+button{
   border:none;
-  border-radius:8px;
+  padding:12px;
+  border-radius:10px;
   cursor:pointer;
+  font-weight:bold;
 }
 
-.add-btn {
+.add{
   background:green;
   color:#fff;
   width:100%;
 }
 
-.card {
+.cards{
+  display:grid;
+  gap:15px;
+}
+
+.card{
   background:#fff;
-  padding:15px;
-  border-radius:12px;
-  margin-top:15px;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
   position:relative;
 }
 
-.actions {
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+
+.card-body{
+  padding:15px;
+}
+
+.title{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.desc{
+  color:#555;
+  font-size:14px;
+}
+
+.price{
+  font-weight:bold;
+  color:var(--primary);
+}
+
+.actions{
   position:absolute;
   top:10px;
   right:10px;
+  display:flex;
+  gap:5px;
 }
 
-.del {
-  background:var(--danger);
-  color:#fff;
-}
-
-.edit {
+.edit{
   background:var(--edit);
   color:#fff;
 }
 
-.price {
-  font-weight:bold;
-  font-size:18px;
+.delete{
+  background:var(--danger);
+  color:#fff;
+}
+
+a{
+  display:inline-block;
+  margin-top:10px;
+  background:var(--primary);
+  color:#fff;
+  padding:8px 15px;
+  border-radius:8px;
+  text-decoration:none;
 }
 </style>
 
 </head>
 <body>
 
-<header>PKRAAJ HUB ADMIN PANEL</header>
+<header>🔥 PKRAAJ HUB ADMIN PRO</header>
 
 <div class="container">
 
-  <input id="name" placeholder="Item Name">
-  <input id="price" placeholder="Price">
-  <input id="link" placeholder="Link">
-  <input id="img" placeholder="Image URL">
-  <textarea id="desc" placeholder="Description"></textarea>
+<div class="form">
+<input id="name" placeholder="Item Name">
+<input id="price" placeholder="Price">
+<input id="link" placeholder="Link">
+<input id="img" placeholder="Image URL">
+<textarea id="desc" placeholder="Description"></textarea>
 
-  <button class="add-btn" id="addBtn">ADD POST</button>
+<button class="add" id="addBtn">ADD POST</button>
+</div>
 
-  <div id="posts"></div>
+<div class="cards" id="posts"></div>
 
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH",
-  databaseURL: "YOUR_DB_URL",
-  projectId: "YOUR_ID",
+  apiKey: "AIzaSyC5FXO_xlO0qXGSnGWE62GYSD9hXwcErjE",
+  authDomain: "mybloglikes-95f54.firebaseapp.com",
+  databaseURL: "https://mybloglikes-95f54-default-rtdb.firebaseio.com",
+  projectId: "mybloglikes-95f54"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -118,78 +169,82 @@ const db = getDatabase(app);
 
 let editKey = null;
 
-// ADD OR UPDATE
-document.getElementById('addBtn').onclick = () => {
-  const name = document.getElementById('name').value;
-  const price = document.getElementById('price').value;
-  const link = document.getElementById('link').value;
-  const desc = document.getElementById('desc').value;
-  const img = document.getElementById('img').value;
+// ADD / UPDATE
+document.getElementById("addBtn").onclick = () => {
+  const name = document.getElementById("name").value;
+  const price = document.getElementById("price").value;
+  const link = document.getElementById("link").value;
+  const img = document.getElementById("img").value;
+  const desc = document.getElementById("desc").value;
 
-  if(!name || !link) return alert("Fill required fields");
-
-  if(editKey){
-    update(ref(db, 'posts/' + editKey), {name,price,link,desc,img});
-    editKey = null;
-    document.getElementById('addBtn').innerText = "ADD POST";
-  } else {
-    push(ref(db,'posts'), {name,price,link,desc,img});
+  if(!name || !link){
+    alert("Fill required fields");
+    return;
   }
 
-  document.getElementById('name').value='';
-  document.getElementById('price').value='';
-  document.getElementById('link').value='';
-  document.getElementById('desc').value='';
-  document.getElementById('img').value='';
+  if(editKey){
+    update(ref(db,"posts/"+editKey),{name,price,link,img,desc});
+    editKey=null;
+    addBtn.innerText="ADD POST";
+  }else{
+    push(ref(db,"posts"),{name,price,link,img,desc});
+  }
+
+  document.getElementById("name").value="";
+  document.getElementById("price").value="";
+  document.getElementById("link").value="";
+  document.getElementById("img").value="";
+  document.getElementById("desc").value="";
 };
 
 // SHOW DATA
-onValue(ref(db,'posts'), snap=>{
-  const posts = document.getElementById('posts');
-  posts.innerHTML='';
+onValue(ref(db,"posts"),snap=>{
+  const posts=document.getElementById("posts");
+  posts.innerHTML="";
 
   snap.forEach(child=>{
-    const data = child.val();
-    const key = child.key;
+    const data=child.val();
+    const key=child.key;
 
-    const div = document.createElement('div');
-    div.className='card';
+    const div=document.createElement("div");
+    div.className="card";
 
-    div.innerHTML = `
+    div.innerHTML=`
       <div class="actions">
-        <button class="edit">EDIT</button>
-        <button class="del">DELETE</button>
+        <button class="edit">Edit</button>
+        <button class="delete">Delete</button>
       </div>
 
-      <img src="${data.img || 'https://via.placeholder.com/300'}" width="100%">
-      <h3>${data.name}</h3>
-      <p>${data.desc}</p>
-      <div class="price">${data.price}</div>
-      <a href="${data.link}" target="_blank">Open</a>
+      <img src="${data.img || 'https://via.placeholder.com/300'}">
+      <div class="card-body">
+        <div class="title">${data.name}</div>
+        <div class="desc">${data.desc || ''}</div>
+        <div class="price">${data.price || ''}</div>
+        <a href="${data.link}" target="_blank">Open</a>
+      </div>
     `;
 
     // DELETE
-    div.querySelector('.del').onclick = ()=>{
+    div.querySelector(".delete").onclick=()=>{
       if(confirm("Delete?")){
-        remove(ref(db,'posts/'+key));
+        remove(ref(db,"posts/"+key));
       }
     };
 
     // EDIT
-    div.querySelector('.edit').onclick = ()=>{
-      document.getElementById('name').value = data.name;
-      document.getElementById('price').value = data.price;
-      document.getElementById('link').value = data.link;
-      document.getElementById('desc').value = data.desc;
-      document.getElementById('img').value = data.img;
+    div.querySelector(".edit").onclick=()=>{
+      name.value=data.name;
+      price.value=data.price;
+      link.value=data.link;
+      img.value=data.img;
+      desc.value=data.desc;
 
-      editKey = key;
-      document.getElementById('addBtn').innerText = "UPDATE POST";
+      editKey=key;
+      addBtn.innerText="UPDATE POST";
     };
 
     posts.appendChild(div);
   });
-
 });
 </script>
 
