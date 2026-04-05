@@ -1,67 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-<title>PKRAAJ HUB</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>PKRAAJ HUB | Official Store</title>
+    <style>
+        /* 1. THEME COLORS & FONTS */
+        :root { --primary: #2563eb; --dark: #0f172a; --bg: #f8fafc; --success: #10b981; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { margin: 0; background: var(--bg); color: var(--dark); padding-bottom: 80px; }
 
-<style>
-body{font-family:sans-serif;background:#f1f5f9;margin:0}
-.header{background:#0f172a;color:#fff;padding:10px;text-align:center}
-.search{padding:10px;text-align:center}
-input{padding:8px;width:80%}
-.card{background:#fff;margin:10px;padding:10px;border-radius:10px}
-img{width:100%;border-radius:10px}
-</style>
+        /* 2. HEADER */
+        header { background: var(--dark); color: white; padding: 18px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .logo { font-weight: 900; font-size: 1.5rem; letter-spacing: 1px; cursor: pointer; }
+
+        /* 3. ADMIN PANEL (FOR POSTING) */
+        #adminPanel { display: none; background: white; padding: 20px; border-bottom: 4px solid var(--primary); animation: slideIn 0.3s ease; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; }
+        .pub-btn { width: 100%; background: var(--success); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; }
+
+        /* 4. CATEGORY TABS */
+        .tabs { display: flex; gap: 10px; padding: 15px; overflow-x: auto; background: white; sticky: top; top: 65px; z-index: 999; border-bottom: 1px solid #eee; }
+        .tab { padding: 8px 20px; border-radius: 20px; border: 1px solid #ddd; background: #f1f5f9; cursor: pointer; white-space: nowrap; font-size: 13px; font-weight: bold; }
+        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* 5. THE POST GRID (2 per row) */
+        .container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; max-width: 1000px; margin: 0 auto; }
+
+        /* 6. POST STRUCTURE [As we discussed] */
+        .post-card { background: white; border-radius: 18px; overflow: hidden; border: 1px solid #eee; box-shadow: 0 4px 10px rgba(0,0,0,0.03); position: relative; display: flex; flex-direction: column; }
+        .post-thumb { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 45px; color: white; }
+        .post-content { padding: 12px; flex-grow: 1; }
+        .post-tag { font-size: 9px; font-weight: 900; color: var(--primary); text-transform: uppercase; }
+        .post-title { font-size: 14px; font-weight: 800; margin: 5px 0; color: #1e293b; height: 36px; overflow: hidden; }
+        .post-price { font-weight: 900; color: var(--dark); font-size: 16px; margin-bottom: 10px; display: block; }
+        .post-btn { background: var(--primary); color: white; text-decoration: none; text-align: center; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: bold; display: block; }
+
+        /* DELETE BUTTON (For Clean-up) */
+        .del-x { position: absolute; top: 8px; right: 8px; background: rgba(239, 68, 68, 0.9); color: white; border: none; border-radius: 6px; padding: 2px 8px; font-size: 10px; cursor: pointer; font-weight: bold; }
+
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @media (min-width: 768px) { .container { grid-template-columns: repeat(4, 1fr); } }
+    </style>
 </head>
-
 <body>
 
-<div class="header">🔥 PKRAAJ HUB</div>
+<header>
+    <div class="logo" onclick="toggleAdmin()">PKRAAJ HUB</div>
+</header>
 
-<div class="search">
-<input type="text" id="search" placeholder="Search..." onkeyup="searchPost()">
+<div id="adminPanel">
+    <h3 style="margin:0;">Add New Content</h3>
+    <input type="text" id="pName" placeholder="Product Title">
+    <input type="text" id="pPrice" placeholder="Price (FREE or ₹)">
+    <input type="text" id="pLink" placeholder="Download Link">
+    <textarea id="pDesc" rows="2" placeholder="Short description..."></textarea>
+    <select id="pFolder">
+        <option value="all">Category</option>
+        <option value="themes">Themes</option>
+        <option value="apps">Apps</option>
+        <option value="pc">PC Software</option>
+    </select>
+    <button class="pub-btn" id="postBtn">PUBLISH TO STORE</button>
 </div>
 
-<div id="posts"></div>
+<div class="tabs">
+    <div class="tab active" onclick="filter('all', this)">All</div>
+    <div class="tab" onclick="filter('themes', this)">Themes</div>
+    <div class="tab" onclick="filter('apps', this)">Apps</div>
+    <div class="tab" onclick="filter('pc', this)">PC</div>
+</div>
+
+<div class="container" id="gridArea">
+    </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyC5FXO_xlO0qXGSnGWE62GYSD9hXwcErjE",
-  databaseURL: "https://mybloglikes-95f54-default-rtdb.firebaseio.com"
-};
+    const firebaseConfig = {
+        apiKey: "AIzaSyC5FXO_xlO0qXGSnGWE62GYSD9hXwcErjE",
+        authDomain: "mybloglikes-95f54.firebaseapp.com",
+        databaseURL: "https://mybloglikes-95f54-default-rtdb.firebaseio.com",
+        projectId: "mybloglikes-95f54",
+        storageBucket: "mybloglikes-95f54.firebasestorage.app",
+        messagingSenderId: "458642789264",
+        appId: "1:458642789264:web:3d60f9fec2f4b64224d915"
+    };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-onValue(ref(db,"posts"),snap=>{
-  let html="";
-  snap.forEach(child=>{
-    const p=child.val();
+    // ADMIN TOGGLE
+    window.toggleAdmin = () => {
+        const p = document.getElementById('adminPanel');
+        p.style.display = (p.style.display === 'block') ? 'none' : 'block';
+    };
 
-    html+=`
-    <div class="card">
-      <img src="${p.img || 'https://via.placeholder.com/300'}">
-      <h3>${p.name}</h3>
-      <p>${p.desc}</p>
-      <a href="${p.link}" target="_blank">Download</a>
-    </div>`;
-  });
+    // UPLOAD POST
+    document.getElementById('postBtn').onclick = () => {
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        const link = document.getElementById('pLink').value;
+        const desc = document.getElementById('pDesc').value;
+        const folder = document.getElementById('pFolder').value;
+        
+        if(!name || !link) return alert("नाम और लिंक भरें!");
 
-  document.getElementById("posts").innerHTML=html;
-});
+        push(ref(db, 'posts'), { name, price, link, desc, folder });
+        alert("Published!");
+        toggleAdmin();
+    };
 
-// SEARCH
-window.searchPost=()=>{
-  let input=document.getElementById("search").value.toLowerCase();
-  let cards=document.querySelectorAll(".card");
+    // DISPLAY POSTS
+    onValue(ref(db, 'posts'), (snapshot) => {
+        const grid = document.getElementById('gridArea');
+        grid.innerHTML = '';
+        snapshot.forEach((child) => {
+            const p = child.val();
+            const key = child.key;
 
-  cards.forEach(c=>{
-    c.style.display=c.innerText.toLowerCase().includes(input)?"block":"none";
-  });
-};
+            let icon = p.folder === 'themes' ? '🎨' : p.folder === 'apps' ? '📱' : '💻';
+            let bg = p.folder === 'themes' ? '#6366f1' : p.folder === 'apps' ? '#f59e0b' : '#334155';
+
+            grid.innerHTML += `
+                <div class="post-card ${p.folder}">
+                    <button class="del-x" onclick="deleteMe('${key}')">X</button>
+                    <div class="post-thumb" style="background:${bg}">${icon}</div>
+                    <div class="post-content">
+                        <span class="post-tag">${p.folder}</span>
+                        <h3 class="post-title">${p.name || 'Undefined'}</h3>
+                        <span class="post-price">${p.price || 'FREE'}</span>
+                        <a href="${p.link}" target="_blank" class="post-btn">GET NOW</a>
+                    </div>
+                </div>`;
+        });
+    });
+
+    // DELETE LOGIC
+    window.deleteMe = (key) => {
+        if(confirm("Delete this post?")) remove(ref(db, 'posts/' + key));
+    };
+
+    // FILTER LOGIC
+    window.filter = (cat, btn) => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.post-card').forEach(c => {
+            if(cat === 'all') c.style.display = 'flex';
+            else c.classList.contains(cat) ? c.style.display = 'flex' : c.style.display = 'none';
+        });
+    };
 </script>
-
 </body>
 </html>
