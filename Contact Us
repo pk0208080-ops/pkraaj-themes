@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us - PKRAAJ THEMES</title>
+    <style>
+        body { background: #05060a; color: #f0f0f0; font-family: sans-serif; padding: 50px; text-align: center; }
+        .box { border: 1px solid #00d2ff; padding: 30px; border-radius: 20px; display: inline-block; }
+        h1 { color: #00d2ff; }
+        a { color: #00d2ff; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Contact Us</h1>
+        <p>किसी भी सहायता या शिकायत के लिए हमें ईमेल करें:</p>
+        <p>Email: <strong>Pk0208080@gmail.com</strong></p>
+        <p>WhatsApp: <a href="https://wa.me/919306930312">+91 9306930312</a></p>
+        <br>
+        <a href="index.html">← Back to Home</a>
+    </div>
+</body>
+</html>
